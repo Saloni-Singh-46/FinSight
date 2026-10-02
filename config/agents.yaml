@@ -1,0 +1,55 @@
+orchestration:
+  max_revisions: 2
+  parallel_execution: true
+  trace_logging: true
+  save_intermediate_states: true
+
+agents:
+  planner:
+    name: "Planner Agent"
+    role: "Intent Parser & Strategy Formulator"
+    description: "Parses queries into structured execution plans, extracts ticker/horizon, and rejects out-of-scope requests."
+    timeout_seconds: 15
+    temperature: 0.0
+
+  data_agent:
+    name: "Data Agent"
+    role: "Financial Data Extractor"
+    description: "Extracts local/live price series, financial statements, balance sheets, peer ratios, and macroeconomic indicators."
+    timeout_seconds: 30
+    temperature: 0.0
+
+  quant_agent:
+    name: "Quant Agent"
+    role: "Quantitative Modeler & Forecaster"
+    description: "Executes ML direction classifiers, LSTM/Transformer quantile forecasts, SHAP feature importance, and anomaly detection."
+    timeout_seconds: 45
+    temperature: 0.1
+
+  sentiment_agent:
+    name: "Sentiment Agent"
+    role: "Market & News Sentiment Analyst"
+    description: "Evaluates financial news, headlines, and public sentiment using FinBERT, aggregating volume-weighted sentiment trends."
+    timeout_seconds: 30
+    temperature: 0.1
+
+  rag_agent:
+    name: "Filings-RAG Agent"
+    role: "Corporate Filings & Transcript Researcher"
+    description: "Performs hybrid retrieval and grounded extraction from annual reports, 10-K/quarterly filings, and earnings call transcripts with page-level citations."
+    timeout_seconds: 40
+    temperature: 0.0
+
+  critic_agent:
+    name: "Critic Agent"
+    role: "Fact-Checker & Consistency Verifier"
+    description: "Verifies cross-agent numerical consistency, checks for contradictions, enforces strict citation requirements, and audits confidence levels."
+    timeout_seconds: 30
+    temperature: 0.0
+
+  writer_agent:
+    name: "Writer Agent"
+    role: "Research Memo Author"
+    description: "Synthesizes verified evidence into an institutional-grade, multi-section equity research memorandum with inline citations and scenario modeling."
+    timeout_seconds: 45
+    temperature: 0.2

@@ -1,0 +1,39 @@
+theme:
+  default_mode: "dark"
+  primary_color: "#2563eb" # Confident blue
+  secondary_color: "#0ea5e9" # Teal accent
+  success_color: "#10b981" # Green
+  danger_color: "#ef4444" # Red
+  warning_color: "#f59e0b" # Amber
+  dark:
+    background: "#0b0f19"
+    surface: "#111827"
+    surface_elevated: "#1f2937"
+    border: "#374151"
+    text_primary: "#f9fafb"
+    text_secondary: "#9ca3af"
+    text_muted: "#6b7280"
+  light:
+    background: "#f8fafc"
+    surface: "#ffffff"
+    surface_elevated: "#f1f5f9"
+    border: "#e2e8f0"
+    text_primary: "#0f172a"
+    text_secondary: "#475569"
+    text_muted: "#94a3b8"
+
+fonts:
+  body: "Inter, sans-serif"
+  code: "JetBrains Mono, monospace"
+
+layout:
+  max_width_px: 1280
+  card_radius_px: 12
+  chart_height_px: 420
+
+demo:
+  cached_tickers:
+    - "TATAMOTORS.NS"
+    - "RELIANCE.NS"
+    - "HDFCBANK.NS"
+  default_sample_query: "Analyze Tata Motors for the next 12 months"

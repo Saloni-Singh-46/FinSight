@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finsight"
+version = "0.1.0"
+description = "FinSight: Multi-Agent AI Financial Research Analyst"
+readme = "README.md"
+authors = [{ name = "FinSight Team" }]
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+    "pyyaml>=6.0.1",
+    "python-dotenv>=1.0.1",
+    "requests>=2.31.0",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "scipy>=1.12.0",
+    "scikit-learn>=1.4.0",
+    "xgboost>=2.0.3",
+    "lightgbm>=4.3.0",
+    "optuna>=3.6.0",
+    "shap>=0.45.0",
+    "torch>=2.2.0",
+    "transformers>=4.40.0",
+    "sentence-transformers>=2.7.0",
+    "chromadb>=0.5.0",
+    "rank_bm25>=0.2.2",
+    "networkx>=3.2.1",
+    "langgraph>=0.0.60",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+    "sse-starlette>=2.1.0",
+    "streamlit>=1.33.0",
+    "plotly>=5.20.0",
+    "reportlab>=4.1.0",
+    "mlflow>=2.12.0",
+    "yfinance>=0.2.38"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=finsight"
+testpaths = [
+    "tests",
+]
+pythonpath = [
+    "src"
+]

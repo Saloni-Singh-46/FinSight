@@ -1,0 +1,54 @@
+app:
+  name: "FinSight"
+  version: "0.1.0"
+  description: "Multi-Agent AI Financial Research Analyst"
+  environment: "development"
+  log_level: "INFO"
+  seed: 42
+
+paths:
+  raw_data_dir: "Datasets"
+  processed_data_dir: "data/processed"
+  interim_data_dir: "data/interim"
+  cache_dir: "data/cache"
+  vectorstore_dir: "data/vectorstore"
+  mlflow_dir: "mlruns"
+  runs_dir: "runs"
+  reports_dir: "reports"
+  docs_dir: "docs"
+  demo_dir: "demo"
+
+defaults:
+  company: "Tata Motors"
+  ticker: "TATAMOTORS.NS"
+  benchmark_ticker: "^NSEI"
+  horizon_days: 252 # ~12 months trading days
+  horizons:
+    short: 5      # 1 week
+    medium: 21    # 1 month
+    long: 63      # 1 quarter
+    annual: 252   # 1 year
+  currency: "INR"
+  currency_symbol: "₹"
+
+live_data:
+  enabled: false
+  cache_ttl_seconds: 86400
+  rate_limit_per_min: 30
+  retry_attempts: 3
+  timeout_seconds: 10
+
+llm:
+  provider: "mock" # "mock" | "openai" | "anthropic" | "ollama"
+  model: "mock-model"
+  temperature: 0.1
+  max_tokens: 4000
+  timeout_seconds: 60
+  cost_tracking: true
+  mock_delay_seconds: 0.2
+
+security:
+  sandbox_timeout_seconds: 5
+  max_sandbox_memory_mb: 256
+  max_query_length: 500
+  disclaimer: "FinSight is an AI-powered educational research platform. All analyses, forecasts, and scores are generated algorithmically for informational purposes only and do NOT constitute financial, investment, legal, or tax advice. Past performance and quantitative models are not indicative of future returns."

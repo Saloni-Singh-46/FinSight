@@ -1,0 +1,77 @@
+seed: 42
+
+classical_ml:
+  horizons: [5, 21, 63]
+  target_col_prefix: "target_return_"
+  direction_col_prefix: "target_dir_"
+  cv:
+    n_splits: 5
+    min_train_size: 252 # 1 year trading days
+    test_size: 63       # 1 quarter
+    embargo_pct: 0.02   # 2% embargo gap to prevent leakage
+    purge_gap: 5        # gap between train and test
+  optuna:
+    n_trials: 30
+    timeout: 300
+    metric: "f1_macro"
+  xgboost:
+    params:
+      n_estimators: 150
+      max_depth: 4
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      random_state: 42
+  lightgbm:
+    params:
+      n_estimators: 150
+      max_depth: 4
+      num_leaves: 15
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      random_state: 42
+  anomaly_detection:
+    contamination: 0.03
+    random_state: 42
+    mad_threshold: 3.5
+
+deep_learning:
+  lstm:
+    seq_length: 30
+    forecast_horizon: 21
+    hidden_dim: 64
+    num_layers: 2
+    dropout: 0.2
+    learning_rate: 0.001
+    batch_size: 32
+    epochs: 40
+    patience: 10
+    quantiles: [0.1, 0.5, 0.9] # For prediction intervals
+  device: "cpu" # "cuda" if available, auto-detected
+
+nlp_sentiment:
+  model_name: "ProsusAI/finbert"
+  num_labels: 3
+  labels: ["positive", "negative", "neutral"]
+  batch_size: 16
+  max_length: 128
+  learning_rate: 2e-5
+  epochs: 3
+  recency_half_life_days: 14 # Exponential decay for news relevance
+
+rag:
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  chunk_size: 600
+  chunk_overlap: 100
+  hybrid_alpha: 0.5 # 0.5 BM25 + 0.5 Dense
+  top_k_retrieve: 15
+  top_k_rerank: 5
+  reranker_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  min_relevance_score: 0.35
+
+backtest:
+  initial_capital: 1000000.0 # 10 Lakhs INR
+  transaction_cost_bps: 10   # 10 bps (0.10%) per trade
+  slippage_bps: 5            # 5 bps
+  risk_free_rate: 0.065      # 6.5% Indian 10y yield proxy

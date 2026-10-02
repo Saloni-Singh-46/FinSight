@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  finsight-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finsight_api
+    command: uvicorn finsight.api.server:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_PROVIDER=mock
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    volumes:
+      - ./data:/app/data
+      - ./runs:/app/runs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  finsight-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finsight_ui
+    command: streamlit run ui/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - API_HOST=finsight-api
+      - API_PORT=8000
+    depends_on:
+      finsight-api:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./runs:/app/runs
+
+networks:
+  default:
+    name: finsight_network
