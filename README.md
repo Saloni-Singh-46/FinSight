@@ -114,7 +114,7 @@ cd finsight
 
 # 2. Set up virtual environment and install dependencies
 py -3.11 -m venv .venv
-.\.venv\Scripts\pip.exe install -r requirements.txt
+.\.venv\Scripts\pip.exe install -e ".[dev]"
 
 # 3. Seed market data & data catalog
 .\.venv\Scripts\python.exe scripts/seed_market_data.py
@@ -134,8 +134,41 @@ py -3.11 -m venv .venv
 
 *Or launch everything with Docker Compose:*
 ```bash
-docker-compose up --build
 ```
+
+## Deployment (Ubuntu VPS)
+
+The Compose deployment runs the Streamlit UI and FastAPI service as separate containers. The UI currently runs analyses in-process; the API remains available for direct API clients. Docker named volumes persist generated data and analysis runs across container replacements.
+
+1. Push the application to Git and clone it on the server. During the image build, the seed script generates deterministic synthetic price and fundamental fixtures, so the containers do not depend on local data files or Git LFS pointers. These fixtures are for demos and testing, not current market data. Raw source datasets are optional for the base deployment; provide their actual files with Git LFS or DVC if enabling features that consume them.
+2. Install Docker Engine and the Docker Compose plugin on an Ubuntu VPS, then clone the repository and enter its directory.
+3. Create the server-only environment file and configure the LLM provider:
+
+   ```bash
+   cp .env.example .env
+   nano .env
+
+   The template defaults to mock mode with debugging disabled. Add an LLM provider key only if using a hosted provider. Do not commit `.env`.
+4. Start and inspect the services:
+
+   ```bash
+   docker compose up -d --build
+   docker compose ps
+   docker compose logs -f finsight-ui
+   curl -f http://127.0.0.1:8000/health
+   ```
+
+5. Point a DNS A record for your domain at the VPS. Install Caddy on the host, allow inbound ports 80 and 443, and configure a site such as:
+
+   ```text
+   research.example.com {
+       reverse_proxy 127.0.0.1:8501
+   }
+   ```
+
+   Caddy will provide HTTPS; open the application at `https://research.example.com`. Both container ports are bound to localhost, so the FastAPI port is not directly exposed to the public internet. Back up the `finsight-data` and `finsight-runs` Docker volumes on the VPS.
+
+For an update, pull the latest code and dataset assets, then run `docker compose up -d --build` again.
 
 ---
 
